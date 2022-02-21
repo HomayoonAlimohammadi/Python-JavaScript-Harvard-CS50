@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="mainPageStyles.css">
+    <title>
+        Google Advanced Search
+    </title>
+        <link rel="icon" href="google_icon.png" type="image/x-type">
+        <style>
+            #title {
+                color: white;
+                margin: 20px;
+                font-size: 24px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .main-body {
+                margin: 40px;
+            }
+            #body-title {
+                color: rgb(242,139,130);
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 20px;
+            }
+            form {
+                border-top: 1px rgb(60,64,67) solid;
+                border-bottom: 1px rgb(60,64,67) solid;
+                /* padding: 50px; */
+                color: white;
+                font-family: Arial, Helvetica, sans-serif;
+                text-align: left;
+                margin: 0px;
+                padding: 40px;
+            }
+            .options-text {
+                font-size: 14px;
+                color: rgb(189,193,198);
+                margin-top: 20px;
+                margin-bottom: 20px;
+                width: 1400px
+            }
+            .options-text input {
+                margin-left: 20px;
+                color: white;
+                text-align: left;
+                width: 500px;
+                height: 25px;
+                background-color: rgb(32, 32, 36);
+                border: 1px solid rgb(95,99,104);
+                border-radius: 2px;
+            }
+            #search-button {
+                color: black;
+                background-color: rgb(138,180,248);
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+                border-radius: 2px;
+                text-align: center;
+                margin-left: 588px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <p id="title">Google
+        </p>
+        
+        <div class="main-body">
+            <p id="body-title">Advanced Search</p>
+        </div>
+        <div class="options">
+            <form action="https://www.google.com/search">
+            <p id="options-header">Find pages with...</p>
+            <p class="options-text">
+            all these words:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" name="as_q">&nbsp;&nbsp;
+            Type the important words: <b>tri-colour rat terrier</b>
+            </p>
+            <p class="options-text"> 
+            this exact word of phrase:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;
+            <input type="text" name="as_epq">&nbsp;&nbsp;
+            Put exact words in quotes: <b>"rat terrier"</b>
+            </p>
+            <p class="options-text">
+            any of these words:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;
+            <input type="text" name="as_oq">&nbsp;&nbsp;
+            Type <b>OR</b> between all the words you want: <b>miniature OR standard</b>
+            </p>
+            <p class="options-text">
+            none of these words:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" name="as_eq">&nbsp;&nbsp;
+            Put a minus sign just before words that you don't want: <b>-rodent, -"Jack Russell"</b>
+            </p>
+            <button id="search-button" type="submit">Advanced Search</button>
+            </form>
+        </div>
+
+        <p style="text-align: left;">
+            <a href="google.html" style="text-decoration: none; color: white; font-family: Arial, Helvetica, sans-serif;
+            margin: 20px">
+            Google Search
+        </a>
+        </p>
+    </body>
+</html>

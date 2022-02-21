@@ -1,0 +1,10 @@
+/* if you want to select something with a specific id, put # before the id
+otherwise without the # it will search amongst the html tags to select not ids */
+/* similarly in order to give a specific class a specific css style, instead of "#" we use "." */
+#welcome_heading, #another_heading {
+    color: blue;
+    text-align: center;
+}
+.baz {
+    color: rgb(63, 202, 179);
+}
