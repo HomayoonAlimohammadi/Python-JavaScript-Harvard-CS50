@@ -1,7 +1,12 @@
 from django.urls import path
 
-from . import views
+from .views import (
+    index,
+    entry_view,
+)
 
+app_name = 'encyclopedia'
 urlpatterns = [
-    path("", views.index, name="index")
+    path("", index, name="index"),
+    path('wiki/<str:title>/', entry_view, name='entry')
 ]
