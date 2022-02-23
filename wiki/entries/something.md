@@ -1,1 +1,1 @@
-something fantastic
+something new

@@ -1,7 +1,9 @@
+from http.client import HTTPResponse
 from django.shortcuts import render
 from matplotlib.pyplot import get
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from markdown import Markdown
+from django.urls import reverse
 from .forms import (
     CreateForm,
 )
@@ -10,6 +12,7 @@ from .util import (
     get_entry,
     save_entry,
 )
+from random import choice
 
 
 def index(request):
@@ -29,10 +32,6 @@ def entry_view(request, title):
     }
     return render(request, 'encyclopedia/entry.html', context = context)
 
-def search_results_view(request, search):
-
-    return
-
 
 def create_view(request):
     if request.method == 'POST':
@@ -40,9 +39,15 @@ def create_view(request):
         if form.is_valid():
             title, content = form.cleaned_data['title'], form.cleaned_data['content']
             save_entry(title, content)
+            return HttpResponseRedirect(reverse("encyclopedia:index"))
     form = CreateForm()
     context = {
         'form': form
     }
     return render(request, 'encyclopedia/create.html', context=context)
 
+
+def random_view(request):
+    result = choice(list_entries())
+    return HttpResponseRedirect(f'../{result}/')
+    
