@@ -42,12 +42,35 @@ def create_view(request):
             return HttpResponseRedirect(reverse("encyclopedia:index"))
     form = CreateForm()
     context = {
-        'form': form
+        'form': form,
+        'state': 'CREATE',
     }
-    return render(request, 'encyclopedia/create.html', context=context)
+    return render(request, 'encyclopedia/create-edit.html', context=context)
 
 
 def random_view(request):
     result = choice(list_entries())
     return HttpResponseRedirect(f'../{result}/')
+
+def edit_view(request, title):
+    if request.method == 'POST':
+        form = CreateForm(request.POST)
+        if form.is_valid():
+            title, content = form.cleaned_data['title'], form.cleaned_data['content']
+            save_entry(title, content)
+            return HttpResponseRedirect(reverse('encyclopedia:index'))
+
+    content = get_entry(title)
+    form_context = {
+        'title': title,
+        'content': content,
+    }
+    form = CreateForm(form_context)
+    context = {
+        'form': form,
+        'state': 'EDIT',
+    }
+    return render(request, 'encyclopedia/create-edit.html', context=context)
     
+def search_view(request):
+    return
