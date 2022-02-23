@@ -73,4 +73,13 @@ def edit_view(request, title):
     return render(request, 'encyclopedia/create-edit.html', context=context)
     
 def search_view(request):
-    return
+    if request.method == 'POST':
+        q = request.POST['q'].lower()
+    else:
+        q = ''
+    all_articles = list_entries()
+    valid_articles = [article for article in all_articles if q in article.lower()]
+    context = {
+        'entries': valid_articles,
+    }
+    return render(request, 'encyclopedia/search.html', context=context)
