@@ -34,16 +34,21 @@ def entry_view(request, title):
 
 
 def create_view(request):
+    form = CreateForm(request.POST or None)
+    error = False
     if request.method == 'POST':
-        form = CreateForm(request.POST)
         if form.is_valid():
             title, content = form.cleaned_data['title'], form.cleaned_data['content']
-            save_entry(title, content)
-            return HttpResponseRedirect(reverse("encyclopedia:index"))
-    form = CreateForm()
+            all_articles = [article.lower() for article in list_entries()]
+            if title.lower() in all_articles:
+                error = True
+            else:
+                save_entry(title, content)
+                return HttpResponseRedirect(reverse("encyclopedia:index"))
     context = {
         'form': form,
         'state': 'CREATE',
+        'error': error,
     }
     return render(request, 'encyclopedia/create-edit.html', context=context)
 

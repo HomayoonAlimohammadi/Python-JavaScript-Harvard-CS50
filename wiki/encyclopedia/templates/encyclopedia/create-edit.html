@@ -9,6 +9,9 @@ Edit
 {% endblock %} 
 
 {% block body %} 
+{% if error %} 
+<li style="color:red;">Article Title already exists!</li>
+{% endif %}
 <form action="." method="post">
 {% csrf_token %} 
 {{ form.as_p }} 
