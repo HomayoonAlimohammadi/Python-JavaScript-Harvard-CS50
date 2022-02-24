@@ -261,3 +261,23 @@ div p h1 {
     background-color: yellow;
 }
 ```
+## SQL:
+```sql
+CREATE TABLE <table_name> (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    origin TEXT NOT NULL,
+    destination TEXT NOT NULL,
+    duration INTEGER NOT NULL
+);
+INSERT INTO <table_name>
+    (origin, destination, duration)
+    VALUES ('New York', 'London', 415);
+SELECT <cols> FROM <table_name> WHERE
+    duration > 500
+    OR origin = 'Paris'
+    AND destination = 'New York';
+UPDATE <table_name>
+    SET <col_name> = <value>
+    WHERE origin = 'New York'
+    AND destination = 'Paris';
+DELETE FROM <table_name> WHERE destination = 'Tokyo'
