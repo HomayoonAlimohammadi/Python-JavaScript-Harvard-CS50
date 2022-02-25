@@ -7,4 +7,6 @@
 {% block body %} 
     {{ page_content|safe }}
     <a href="{% url 'encyclopedia:edit' title %}"><button>Edit</button></a>
+    <a href="{% url 'encyclopedia:delete' title %}"><button>Delete</button></a>
+
 {% endblock %} 

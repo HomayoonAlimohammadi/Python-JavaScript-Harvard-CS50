@@ -11,6 +11,8 @@ from .util import (
     list_entries,
     get_entry,
     save_entry,
+    edit_entry,
+    delete_entry,
 )
 from random import choice
 
@@ -61,8 +63,9 @@ def edit_view(request, title):
     if request.method == 'POST':
         form = CreateForm(request.POST)
         if form.is_valid():
+            old_title = title
             title, content = form.cleaned_data['title'], form.cleaned_data['content']
-            save_entry(title, content)
+            edit_entry(old_title=old_title, title=title, content=content)
             return HttpResponseRedirect(reverse('encyclopedia:index'))
 
     content = get_entry(title)
@@ -88,3 +91,8 @@ def search_view(request):
         'entries': valid_articles,
     }
     return render(request, 'encyclopedia/search.html', context=context)
+
+
+def delete_view(request, title):
+    delete_entry(title)
+    return HttpResponseRedirect(reverse('encyclopedia:index'))

@@ -25,6 +25,21 @@ def save_entry(title, content):
     default_storage.save(filename, ContentFile(content))
 
 
+def edit_entry(old_title, title, content):
+    """
+    Edits a page to the new title and content
+    """
+    old_file = f"entries/{old_title}.md"
+    default_storage.delete(old_file)
+    new_file = f"entries/{title}.md"
+    default_storage.save(new_file, ContentFile(content))
+
+def delete_entry(title):
+    filename = f"entries/{title}.md"
+    if default_storage.exists(filename):
+        default_storage.delete(filename)
+
+
 def get_entry(title):
     """
     Retrieves an encyclopedia entry by its title. If no such
