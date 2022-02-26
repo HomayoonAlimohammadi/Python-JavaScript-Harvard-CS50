@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Commerce
+        </title>
+        <h1>Auctions</h1>
+            {% if user.is_authenticated %}
+            <h3>
+                Signed in as {{ user.username }}
+            </h3>
+            {% endif %}
+        <div id="nav">
+            <a href="{% url 'index' %}">Home Page</a>
+            <a href='{% url "auction:index" %}'>Active Listings</a>
+        </div>
+    </head>
+    <body>
+        {% block body %}
+        {% endblock %} 
+    </body>
+
+</html>

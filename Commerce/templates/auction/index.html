@@ -1,0 +1,18 @@
+{% extends 'layout.html' %} 
+
+{% block body %} 
+<div id="listings"> 
+    <ul>
+        <h1>Active Listings</h1>
+        {% for listing in listings %}
+        <li>
+            {{ listing.title }}
+        </li>
+        {% empty %} 
+        <li>
+            No Active Listings are available at the moment!
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
