@@ -1,12 +1,19 @@
 {% extends 'layout.html' %} 
 
+{% block title %} 
+Auction 
+{% endblock %} 
+
 {% block body %} 
 <div id="listings"> 
     <ul>
         <h1>Active Listings</h1>
         {% for listing in listings %}
         <li>
-            {{ listing.title }}
+            {{ listing.title }}<br/> 
+            {{ listing.description }}<br/> 
+            {{ listing.starting_price }} 
+
         </li>
         {% empty %} 
         <li>

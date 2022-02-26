@@ -2,7 +2,8 @@
 <html>
     <head>
         <title>
-            Commerce
+            {% block title %}
+            {% endblock %} 
         </title>
         <h1>Auctions</h1>
             {% if user.is_authenticated %}
@@ -13,6 +14,7 @@
         <div id="nav">
             <a href="{% url 'index' %}">Home Page</a>
             <a href='{% url "auction:index" %}'>Active Listings</a>
+            <a href='{% url "auction:create_listing" %}'>Create Listing</a>
         </div>
     </head>
     <body>

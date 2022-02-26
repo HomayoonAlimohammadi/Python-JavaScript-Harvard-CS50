@@ -1,11 +1,18 @@
 {% extends 'layout.html' %} 
 
+{% block title %} 
+Commerce
+{% endblock %} 
+
 {% block body %} 
 <div id="listings">
     <ul>
         {% for listing in listings %}
         <li>
-            {{ listing.title }}
+            {{ listing.title }}<br/> 
+            {{ listing.description }}<br/> 
+            {{ listing.starting_price }} 
+
         </li>
         {% empty %}
             <li>No Active Listings are available at the moment!</li>

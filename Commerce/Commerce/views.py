@@ -1,6 +1,9 @@
 from django.shortcuts import render
-
+from Auction.models import Listing
 
 def index_view(request):
-    context = {}
+    listings = Listing.objects.all()
+    context = {
+        'listings': listings
+    }
     return render(request, 'index.html', context = context)
