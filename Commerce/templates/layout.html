@@ -15,6 +15,11 @@
             <a href="{% url 'index' %}">Home Page</a>
             <a href='{% url "auction:index" %}'>Active Listings</a>
             <a href='{% url "auction:create_listing" %}'>Create Listing</a>
+            {% if user.is_authenticated %} 
+            <a href="{% url 'auction:logout' %}">Log Out</a>
+            {% else %} 
+            <a href="{% url 'auction:login' %}">Log In</a>
+            {% endif %}
         </div>
     </head>
     <body>

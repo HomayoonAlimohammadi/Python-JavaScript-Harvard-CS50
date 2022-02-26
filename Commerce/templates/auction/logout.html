@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}  
+
+{% block title %} 
+Logout
+{% endblock %}  
+
+{% block body %} 
+<h2>
+    You are already logged in as {{ request.user.username }}<br/>
+    Are you sure you want to Logout?<br/>
+    <form action="{% url 'auction:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Yes</button>
+        <a href='{% url "index" %}'><button>No</button></a>
+    </form>
+</h2>
+{% endblock %} 

@@ -1,3 +1,4 @@
+from collections import UserList
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +9,7 @@ from .forms import (
     CreateCategoryForm,
     CreateCommentForm,
     CreateListingForm,
+    LoginForm,
 )
 
 # Create your views here.
@@ -32,6 +34,8 @@ def listing_view(request, id):
 
 
 def create_listing_view(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('auction:login'))
     form = CreateListingForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -61,8 +65,30 @@ def close_listing_view(request):
 
 
 def login_view(request):
-    pass
+    form = LoginForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            context['message'] = 'Invalid Username or Password.'
+    return render(request, 'auction/login.html', context=context)
 
 
 def logout_view(request):
-    pass
+    if request.method == 'POST':
+        username = request.user.username
+        password = request.user.password
+        user = authenticate(request, username=username, password=password)
+        logout(request)
+        return HttpResponseRedirect(reverse('index'))
+    context = {}
+    return render(request, 'auction/logout.html', context=context)
+
+

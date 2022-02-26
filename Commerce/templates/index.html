@@ -9,7 +9,7 @@ Commerce
     <ul>
         {% for listing in listings %}
         <li>
-            {{ listing.title }}<br/> 
+            <a href='{% url "auction:listing" listing.id %}'>{{ listing.title }}</a><br/> 
             {{ listing.description }}<br/> 
             {{ listing.starting_price }} 
 

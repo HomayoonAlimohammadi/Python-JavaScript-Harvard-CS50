@@ -7,6 +7,11 @@ class CreateListingForm(forms.Form):
     category = forms.ModelMultipleChoiceField(queryset= Category.objects.all(), widget= forms.CheckboxSelectMultiple)
     starting_price = forms.FloatField()
 
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput())
+
 class CreateCategoryForm(forms.Form):
     name = forms.CharField(max_length=20)
 

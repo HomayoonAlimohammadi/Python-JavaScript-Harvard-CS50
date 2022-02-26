@@ -1,0 +1,15 @@
+{% extends 'layout.html' %} 
+
+{% block title %} 
+Login
+{% endblock %} 
+
+
+{% block body %} 
+<form action="{% url 'auction:login' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit">
+</form>
+<a href="{% url 'index' %}"><button>Home</button></a>
+{% endblock %} 
