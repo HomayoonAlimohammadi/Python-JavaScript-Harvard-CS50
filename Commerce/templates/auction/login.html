@@ -6,6 +6,7 @@ Login
 
 
 {% block body %} 
+{% load crispy_forms_tags %}
 <form action="{% url 'auction:login' %}" method="post">
     {% csrf_token %}
     <div class="form-group">

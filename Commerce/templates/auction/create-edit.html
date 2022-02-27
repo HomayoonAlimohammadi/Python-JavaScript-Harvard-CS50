@@ -4,7 +4,8 @@
 Create Listing
 {% endblock %} 
 
-{% block body %} 
+{% block body %}
+{% load crispy_forms_tags %} 
 {% if message %} 
 <h2 style="color:red;">
 {{ message }}
@@ -12,8 +13,7 @@ Create Listing
 {% endif %} 
 <form action="." method="post">
     {% csrf_token %} 
-    {{ form.as_p }}
-    <a href='.'><button>Add Category</button></a>
-    <input type="submit">
+    {{ form|crispy }}
+    <input class="btn btn-primary" type="submit" value="Create">
 </form>
 {% endblock %}
