@@ -7,6 +7,8 @@ Login
 
 {% block body %} 
 {% load crispy_forms_tags %}
+<div class="container py">
+    <h1>Login</h1>
 <form action="{% url 'auction:login' %}" method="post">
     {% csrf_token %}
     <div class="form-group">
@@ -17,6 +19,5 @@ Login
     </div>
     <input class="btn btn-primary" type="submit" value="Login">
 </form>
-<br/>
-<a class='btn btn-secondary' href="{% url 'index' %}">Home</a>
+</div>
 {% endblock %} 

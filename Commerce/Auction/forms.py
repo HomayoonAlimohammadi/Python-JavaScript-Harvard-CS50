@@ -37,7 +37,7 @@ class CreateCommentForm(forms.ModelForm):
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password1']
 
     def save(self, commit=True):
         user = super(CreateUserForm, self).save(commit=False)

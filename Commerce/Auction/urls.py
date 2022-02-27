@@ -9,6 +9,7 @@ from .views import (
     login_view,
     logout_view,
     register_view,
+    search_view,
 )
 
 
@@ -18,6 +19,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),
+    path('listings/search/', search_view, name='search'),
     path('listings/<int:id>/', listing_view, name='listing'),
     path('listings/create/', create_listing_view, name='create_listing'),
     path('listings/<int:id>/edit/', edit_listing_view, name='edit_listing'),

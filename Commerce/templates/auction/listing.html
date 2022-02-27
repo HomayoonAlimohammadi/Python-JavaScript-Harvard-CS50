@@ -6,22 +6,26 @@ Listing {{ listing.id }}
 
 
 {% block body %} 
-{% if listing.image.url %} 
+{% load static %}
+<div class="container py-2">
+{% if listing.image %} 
 <div id="image">
-<img src="{{ listing.image.url }}" width='300' height="200">
+<img src="{{ listing.image.url }}" class="card-img-top img-fluid">
 </div>
-{% else %}
-<h3>No Image available for this Listing!</h3>
+{% else %}  
+<img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
 {% endif %}
-<ul>
-<li><h2>{{ listing.title }}</h2></li>
-<h4>
-<li>Starting Price: {{ listing.starting_price }}</li>
-<li>Description: {{ listing.description }}</li>
-</h4>
-</ul>
+<h2>{{ listing.title }}</h2>
+<h5>
+Starting Price: {{ listing.starting_price }}
+</h5>
+<h6>
+{{ listing.description }}
+</h6>
+<br/>
 {% if request.user.is_authenticated and request.user == listing.user %}
-<a href="{% url 'auction:edit_listing' listing.id %}"><button>Edit</button></a>
-<a href="{% url 'auction:delete_listing' listing.id %}"><button>Delete</button></a>
+<a class="btn btn-primary" href="{% url 'auction:edit_listing' listing.id %}">Edit</a>
+<a class='btn btn-primary' href="{% url 'auction:delete_listing' listing.id %}">Delete</a>
 {% endif %}
+</div>
 {% endblock %}

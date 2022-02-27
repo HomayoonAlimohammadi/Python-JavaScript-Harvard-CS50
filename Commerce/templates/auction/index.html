@@ -5,22 +5,32 @@ Auction
 {% endblock %} 
 
 {% block body %} 
-<div id="listings"> 
-    <ul>
-        <h1>Active Listings</h1>
+
+{% load static %}
+<div class="container"> 
+    <h2>Active Listings</h2>
+    <ul class="list-group">
+        
         {% for listing in listings %}
-        <li>
-            <a href='{% url "auction:listing" listing.id %}'><h2>{{ listing.title }}</h2></a>
-            <h4>
-            Starting Price: {{ listing.starting_price }}<br/>
-            Description: {{ listing.description }}
-            </h4>
-        </li>
+            {% if listing.image %} 
+            <div class="image-parent">
+            <img src="{{ listing.image.url }}" class="img-fluid">
+            {% else %}  
+            <img src="{% static 'Auction/no_image.jpg' %}" class="img-fluid">
+            {% endif %}
+            </div>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+            <a href='{% url "auction:listing" listing.id %}'>
+                <h3>{{ listing.title }}</h3>
+            </a>
+                {{ listing.description }}
+            <h5>
+            Starting Price: <b>{{ listing.starting_price }}</b>
+            </h5>
+            </div>
         {% empty %} 
-        <li>
             No Active Listings are available at the moment!
-        </li>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}

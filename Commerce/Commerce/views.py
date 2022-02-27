@@ -6,4 +6,4 @@ def index_view(request):
     context = {
         'listings': listings
     }
-    return render(request, 'index.html', context = context)
+    return render(request, 'auction/index.html', context = context)

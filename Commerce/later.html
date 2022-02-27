@@ -1,8 +1,7 @@
-<a href="{% url 'auction:categories' %}">Categories</a>
-            <a href="{% url 'auction:watchlist' %}">Watchlist</a>
-            <a href="{% url 'auction:create_listing' %}">Create Listing</a>
-            {% if user.is_authenticated %}
-            <a href="{% url 'auction:logout' %}">Log Out</a>
-            {% else %}
-            <a href="{% url 'auction:login' %}">Log In</a>
-            {% endif %}
+{% if listing.image.url %} 
+<div id="image">
+<img src="{{ listing.image.url }}" width='300' height="200">
+</div>
+{% else %}  
+<h3>No Image available for this Listing!</h3>
+{% endif %}

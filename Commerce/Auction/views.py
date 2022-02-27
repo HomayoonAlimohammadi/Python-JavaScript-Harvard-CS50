@@ -14,6 +14,7 @@ from .forms import (
     CreateUserForm,
 )
 from django.contrib import messages
+from django.db.models import Q
 
 
 # Create your views here.
@@ -41,7 +42,7 @@ def create_listing_view(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('auction:login'))
     if request.method == 'POST':
-        form = CreateListingForm(request.POST, request.FILES)
+        form = CreateListingForm(request.POST, request.FILES or None)
         if form.is_valid():
             print(form.cleaned_data)
             listing = Listing(
@@ -49,7 +50,7 @@ def create_listing_view(request):
                 description = form.cleaned_data['description'],
                 user = request.user,
                 starting_price = form.cleaned_data['starting_price'],
-                image = form.cleaned_data['image']
+                image = form.cleaned_data.get('image')
                 # category = form.cleaned_data['category'],
             )
             listing.save()
@@ -57,9 +58,11 @@ def create_listing_view(request):
     else:
         form = CreateListingForm()
     context = {
-        'form': form
+        'form': form,
+        'method': 'create'
     }
     return render(request, 'auction/create-edit.html', context=context)
+
 
 def edit_listing_view(request, id=None):
     try:
@@ -73,17 +76,18 @@ def edit_listing_view(request, id=None):
         print('listing.image: ',listing.image)
         form = CreateListingForm(listing_context)
         context = {
-            'form': form
+            'form': form,
+            'method': 'edit'
         }
     except:
         raise Http404
     if request.method == 'POST':
-        form = CreateListingForm(request.POST)
+        form = CreateListingForm(request.POST, request.FILES or None)
         listing = Listing.objects.get(id=id)
         if form.is_valid():
             listing.title = form.cleaned_data['title']
             listing.description = form.cleaned_data['description']
-            listing.image = form.cleaned_data['image']
+            listing.image = form.cleaned_data.get('image')
             listing.starting_price = form.cleaned_data['starting_price']
             listing.save()
             return HttpResponseRedirect(reverse('auction:listing', args=[id]))
@@ -155,5 +159,13 @@ def register_view(request):
     return render(request, 'register.html', context=context)
 
 
-
-
+def search_view(request):
+    if request.method == 'POST':
+        q = request.POST['q']
+    else:
+        q = ''
+    listings = Listing.objects.filter(Q(title__icontains=q) | Q(description__icontains=q))
+    context = {
+        'listings': listings
+    }
+    return render(request, 'index.html', context)
