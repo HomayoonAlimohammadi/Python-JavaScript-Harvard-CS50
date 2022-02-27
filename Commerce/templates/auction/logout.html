@@ -5,13 +5,13 @@ Logout
 {% endblock %}  
 
 {% block body %} 
-<h2>
     You are already logged in as {{ request.user.username }}<br/>
-    Are you sure you want to Logout?<br/>
+    Are you sure you want to Logout?<br/><br/>
     <form action="{% url 'auction:logout' %}" method="post">
         {% csrf_token %}
-        <button type="submit">Yes</button>
-        <a href='{% url "index" %}'><button>No</button></a>
+        <button class='btn btn-primary' type="submit">Yes</button>
+        <a href='{% url "index" %}'><button class='btn btn-primary' type="button">No</button></a>
+
     </form>
-</h2>
+
 {% endblock %} 

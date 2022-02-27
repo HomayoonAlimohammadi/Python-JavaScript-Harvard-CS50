@@ -5,9 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=50)
-    email = models.CharField(max_length=50, unique=True)
+    pass
 
 
 class Category(models.Model):
@@ -30,6 +28,7 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     starting_price = models.FloatField()
+    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     
 
 class Bid(models.Model):

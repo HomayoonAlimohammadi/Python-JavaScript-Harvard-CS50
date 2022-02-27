@@ -10,10 +10,11 @@ Auction
         <h1>Active Listings</h1>
         {% for listing in listings %}
         <li>
-            <a href='{% url "auction:listing" listing.id %}'>{{ listing.title }}</a><br/> 
-            {{ listing.description }}<br/> 
-            {{ listing.starting_price }} 
-
+            <a href='{% url "auction:listing" listing.id %}'><h2>{{ listing.title }}</h2></a>
+            <h4>
+            Starting Price: {{ listing.starting_price }}<br/>
+            Description: {{ listing.description }}
+            </h4>
         </li>
         {% empty %} 
         <li>
