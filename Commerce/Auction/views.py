@@ -43,7 +43,7 @@ def listing_view(request, id):
     context = {
     'listing': listing,
     'is_watching': is_watching,
-    } 
+    }
     return render(request, 'auction/listing.html', context=context)
 
 
@@ -142,6 +142,7 @@ def edit_listing_view(request, id=None):
 def delete_listing_view(request, id=None):
     try:
         listing = Listing.objects.get(id=id)
+
         listing.delete()
         return HttpResponseRedirect(reverse('auction:index'))
     except:
