@@ -14,6 +14,8 @@ from .views import (
     watchlist_view,
     add_comment_view,
     delete_comment_view,
+    category_view,
+    category_list_view,
 )
 
 
@@ -26,6 +28,8 @@ urlpatterns = [
     path('listings/search/', search_view, name='search'),
     path('listings/create/', create_listing_view, name='create_listing'),
     path('listings/watchlist/', watchlist_view, name='watchlist'),
+    path('listings/category/', category_list_view, name='category_list'),
+    path('listings/category/<int:id>/', category_view, name='category'),
     path('listings/<int:id>/', listing_view, name='listing'),
     path('listings/<int:id>/edit/', edit_listing_view, name='edit_listing'),
     path('listings/<int:id>/delete/', delete_listing_view, name='delete_listing'),

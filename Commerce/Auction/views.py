@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from .models import Listing, Comment
+from .models import Listing, Comment, Category
 from .forms import (
     CreateBidForm,
     CreateCategoryForm,
@@ -87,16 +87,26 @@ def create_listing_view(request):
     if request.method == 'POST':
         form = CreateListingForm(request.POST, request.FILES or None)
         if form.is_valid():
-            print(form.cleaned_data)
             listing = Listing(
                 title = form.cleaned_data['title'],
-                description = form.cleaned_data['description'],
+                description = form.cleaned_data.get('description'),
                 user = request.user,
                 starting_price = form.cleaned_data['starting_price'],
                 image = form.cleaned_data.get('image')
                 # category = form.cleaned_data['category'],
             )
             listing.save()
+
+            categories = form.cleaned_data.get('categories')
+            if categories is not None:
+                categories = categories.split()
+            for category_name in categories:
+                try:
+                    category = Category.objects.get(name=category_name)
+                except:
+                    category = Category(name=category_name)
+                    category.save()
+                listing.category.add(category)
             return HttpResponseRedirect(reverse('auction:listing', args=[listing.id]))
     else:
         form = CreateListingForm()
@@ -110,13 +120,14 @@ def create_listing_view(request):
 def edit_listing_view(request, id=None):
     try:
         listing = Listing.objects.get(id=id)
+        categories = ' '.join([category.name for category in listing.category.all()])
         listing_context = {
             'title': listing.title,
             'description': listing.description,
             'starting_price': listing.starting_price,
             'image': listing.image,
+            'categories': categories,
         }
-        print('listing.image: ',listing.image)
         form = CreateListingForm(listing_context)
         context = {
             'form': form,
@@ -128,10 +139,31 @@ def edit_listing_view(request, id=None):
         form = CreateListingForm(request.POST, request.FILES or None)
         listing = Listing.objects.get(id=id)
         if form.is_valid():
+            
+            categories = form.cleaned_data.get('categories')
+            if categories is not None:
+                categories = categories.split()
+
+            if listing.category is not None:
+                for category in listing.category.all():
+                    listing.category.remove(category)
+
+            for category_name in categories:
+                try:
+                    category = Category.objects.get(name=category_name)
+                except:
+                    category = Category(
+                        name=category_name,
+                    )
+                    category.save()
+                listing.category.add(category)
+
             listing.title = form.cleaned_data['title']
-            listing.description = form.cleaned_data['description']
-            listing.image = form.cleaned_data.get('image')
+            listing.description = form.cleaned_data.get('description')
             listing.starting_price = form.cleaned_data['starting_price']
+            if form.cleaned_data.get('image') is not None:
+                listing.image = form.cleaned_data.get('image')
+
             listing.save()
             return HttpResponseRedirect(reverse('auction:listing', args=[id]))
         else:
@@ -243,3 +275,23 @@ def delete_comment_view(request, id, comment_id):
     comment.delete()
 
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+
+
+def category_view(request, id):
+    try:
+        category = Category.objects.get(id=id)
+    except:
+        raise Http404
+    listings = Listing.objects.filter(category=category).all()
+    context = {
+        'listings': listings
+    }
+
+    return render(request, 'auction/index.html', context)
+
+def category_list_view(request):
+    categories = Category.objects.all()
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'auction/category_list.html', context)

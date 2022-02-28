@@ -6,11 +6,9 @@ class CreateListingForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = ['title', 'description', 'image', 'starting_price']
-    # title = forms.CharField(max_length=50)
-    # description = forms.CharField(widget=forms.Textarea, required=False)
-    # image = forms.ImageField(required=False)
-    # category = forms.ModelMultipleChoiceField(queryset= Category.objects.all(), widget= forms.CheckboxSelectMultiple)
-    # starting_price = forms.FloatField()
+    
+    categories = forms.CharField(max_length=150, required=False)
+    
 
 
 class LoginForm(forms.Form):
