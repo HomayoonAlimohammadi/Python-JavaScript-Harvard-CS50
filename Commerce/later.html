@@ -1,7 +1,5 @@
-{% if listing.image.url %} 
-<div id="image">
-<img src="{{ listing.image.url }}" width='300' height="200">
-</div>
-{% else %}  
-<h3>No Image available for this Listing!</h3>
-{% endif %}
+<a href='{% url "auction:listing" listing.id %}'>
+    {{ listing.title }}<br/>
+</a>
+{{ listing.description }}<br/>
+Starting Price: <b>{{ listing.starting_price }}</b>

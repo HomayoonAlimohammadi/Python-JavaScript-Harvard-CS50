@@ -30,12 +30,53 @@ def index_view(request):
 def listing_view(request, id):
     try:
         listing = Listing.objects.get(id=id)
-        context = {
-            'listing': listing
-        }
     except:
         raise Http404
+    user = request.user
+    if user.is_authenticated:
+        if user in listing.watchers.all():
+            is_watching = True
+        else:
+            is_watching = False
+    else:
+        is_watching = False
+    context = {
+    'listing': listing,
+    'is_watching': is_watching,
+    } 
     return render(request, 'auction/listing.html', context=context)
+
+
+def toggle_watch(request, id):
+    try:
+        listing = Listing.objects.get(id=id)
+    except:
+        raise Http404
+    user = request.user
+    if user.is_authenticated:
+        if user in listing.watchers.all():
+            listing.watchers.remove(user)
+            is_watching = False
+        else: 
+            listing.watchers.add(user)
+            is_watching = True
+    else:
+        return HttpResponseRedirect(reverse('auction:login'))
+    context = {
+        'listing': listing,
+        'is_watching': is_watching,
+    }
+    return render(request, 'auction/listing.html', context)
+
+
+def watchlist_view(request):
+    user = request.user
+    if user.is_authenticated:
+        watchlist = user.watchlist.all()
+    context = {
+        'watchlist': watchlist,
+    }
+    return render(request, 'auction/watchlist.html', context)
 
 
 def create_listing_view(request):
@@ -168,4 +209,4 @@ def search_view(request):
     context = {
         'listings': listings
     }
-    return render(request, 'index.html', context)
+    return render(request, 'auction/index.html', context)

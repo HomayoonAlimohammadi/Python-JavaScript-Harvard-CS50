@@ -1,10 +1,11 @@
 {% extends 'layout.html' %} 
 
 {% block title %} 
-Auction 
+Watchlist
 {% endblock %} 
 
 {% block body %} 
+
 
 {% load static %}
 <style>
@@ -18,9 +19,9 @@ Auction
 <div class="container"> 
     <div class="row">
         <div class="col-12 col-sm-8 col-lg-12">
-            <h6 class="text-muted">Active Listings</h6>
+            <h6 class="text-muted">Watchlist</h6>
             <ul class="list-group">
-                {% for listing in listings %}
+                {% for listing in watchlist %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                         <a href='{% url "auction:listing" listing.id %}'>
                             {{ listing.title }}<br/>
@@ -35,11 +36,12 @@ Auction
                             {% endif %}
                         </div>
                         {% empty %} 
-                            No Active Listings are available at the moment!
+                            No Listings in the Watchlist.
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 </div>
+
 {% endblock %}

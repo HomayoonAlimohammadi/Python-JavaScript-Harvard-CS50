@@ -10,6 +10,8 @@ from .views import (
     logout_view,
     register_view,
     search_view,
+    toggle_watch,
+    watchlist_view,
 )
 
 
@@ -20,9 +22,11 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),
     path('listings/search/', search_view, name='search'),
-    path('listings/<int:id>/', listing_view, name='listing'),
     path('listings/create/', create_listing_view, name='create_listing'),
+    path('listings/watchlist/', watchlist_view, name='watchlist'),
+    path('listings/<int:id>/', listing_view, name='listing'),
     path('listings/<int:id>/edit/', edit_listing_view, name='edit_listing'),
     path('listings/<int:id>/delete/', delete_listing_view, name='delete_listing'),
     path('listings/<int:id>/close/', close_listing_view, name='close_listing'),
+    path('listings/<int:id>/toggle-watch/', toggle_watch, name='toggle_watch'),
 ]

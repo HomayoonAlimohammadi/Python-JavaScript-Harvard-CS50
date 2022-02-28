@@ -8,24 +8,34 @@ Listing {{ listing.id }}
 {% block body %} 
 {% load static %}
 <div class="container py-2">
-{% if listing.image %} 
-<div id="image">
-<img src="{{ listing.image.url }}" class="card-img-top img-fluid">
-</div>
-{% else %}  
-<img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
-{% endif %}
-<h2>{{ listing.title }}</h2>
-<h5>
-Starting Price: {{ listing.starting_price }}
-</h5>
-<h6>
-{{ listing.description }}
-</h6>
-<br/>
-{% if request.user.is_authenticated and request.user == listing.user %}
-<a class="btn btn-primary" href="{% url 'auction:edit_listing' listing.id %}">Edit</a>
-<a class='btn btn-primary' href="{% url 'auction:delete_listing' listing.id %}">Delete</a>
-{% endif %}
+    {% if is_watching %} 
+    <a href="{% url 'auction:toggle_watch' listing.id %}">
+        <button class="btn btn-secondary">Remove from Watchlist</button>
+    </a>
+    {% else %} 
+    <a href="{% url 'auction:toggle_watch' listing.id %}">
+        <button class="btn btn-secondary">Add to Watchlist</button>
+    </a>
+    {% endif %}
+    <hr>
+    {% if listing.image %} 
+    <div id="image">
+    <img src="{{ listing.image.url }}" class="card-img-top img-fluid">
+    </div>
+    {% else %}  
+    <img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
+    {% endif %}
+    <h2>{{ listing.title }}</h2>
+    <h5>
+    Starting Price: {{ listing.starting_price }}
+    </h5>
+    <h6>
+    {{ listing.description }}
+    </h6>
+    <br/>
+    {% if request.user.is_authenticated and request.user == listing.user %}
+    <a class="btn btn-primary" href="{% url 'auction:edit_listing' listing.id %}">Edit</a>
+    <a class='btn btn-primary' href="{% url 'auction:delete_listing' listing.id %}">Delete</a>
+    {% endif %}
 </div>
 {% endblock %}
