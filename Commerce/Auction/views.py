@@ -175,12 +175,20 @@ def edit_listing_view(request, id=None):
 
 def delete_listing_view(request, id=None):
     try:
-        listing = Listing.objects.get(id=id)
-
-        listing.delete()
-        return HttpResponseRedirect(reverse('auction:index'))
+            listing = Listing.objects.get(id=id)     
     except:
         raise Http404
+
+    if request.method == 'POST':
+        listing.delete()
+        return HttpResponseRedirect(reverse('auction:index'))
+        
+    context = {
+        'listing': listing,
+    }
+    return render(request, 'auction/delete.html', context)
+    
+
 
 def close_listing_view(request):
     pass
@@ -290,6 +298,10 @@ def category_view(request, id):
     return render(request, 'auction/index.html', context)
 
 def category_list_view(request):
+    categories = Category.objects.all()
+    for category in categories:
+        if category.listings.all().count() == 0:
+            category.delete()
     categories = Category.objects.all()
     context = {
         'categories': categories,
