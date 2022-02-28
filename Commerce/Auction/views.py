@@ -46,8 +46,6 @@ def listing_view(request, id):
     'is_watching': is_watching,
     'comment_form': comment_form,
     }
-    if return_context:
-        return context
     return render(request, 'auction/listing.html', context=context)
 
 
