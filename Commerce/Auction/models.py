@@ -48,9 +48,6 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-
-
-
 # These two auto-delete files from filesystem when they are unneeded:
 
 @receiver(models.signals.post_delete, sender=Listing)
