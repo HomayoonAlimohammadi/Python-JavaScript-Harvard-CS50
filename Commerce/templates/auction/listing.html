@@ -26,13 +26,16 @@ Listing {{ listing.id }}
     {% else %}  
     <img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
     {% endif %}
+    <br/>
     <h2>{{ listing.title }}</h2>
     <h5>
     Starting Price: {{ listing.starting_price }}
     </h5>
     <h6>
     {{ listing.description }}
-    </h6>
+    </h6><br/><br/>
+    Created at: {{ listing.created_at }}<br/>
+    Last Update: {{ listing.updated_at }}<br/>
     <br/>
     {% if request.user.is_authenticated and request.user == listing.user %}
     <a class="btn btn-primary" href="{% url 'auction:edit_listing' listing.id %}">Edit</a>
