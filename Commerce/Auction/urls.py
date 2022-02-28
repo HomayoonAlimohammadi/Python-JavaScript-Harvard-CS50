@@ -12,6 +12,8 @@ from .views import (
     search_view,
     toggle_watch,
     watchlist_view,
+    add_comment_view,
+    delete_comment_view,
 )
 
 
@@ -29,4 +31,6 @@ urlpatterns = [
     path('listings/<int:id>/delete/', delete_listing_view, name='delete_listing'),
     path('listings/<int:id>/close/', close_listing_view, name='close_listing'),
     path('listings/<int:id>/toggle-watch/', toggle_watch, name='toggle_watch'),
+    path('listings/<int:id>/comment/', add_comment_view, name='comment'),
+    path('listings/<int:id>/comment/delete/<int:comment_id>/', delete_comment_view, name='delete_comment'),
 ]

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from .models import Listing
+from .models import Listing, Comment
 from .forms import (
     CreateBidForm,
     CreateCategoryForm,
@@ -27,11 +27,12 @@ def index_view(request):
     return render(request, 'auction/index.html', context=context)
 
 
-def listing_view(request, id):
+def listing_view(request, id, return_context=False):
     try:
         listing = Listing.objects.get(id=id)
     except:
         raise Http404
+    comment_form = CreateCommentForm()
     user = request.user
     if user.is_authenticated:
         if user in listing.watchers.all():
@@ -43,7 +44,10 @@ def listing_view(request, id):
     context = {
     'listing': listing,
     'is_watching': is_watching,
+    'comment_form': comment_form,
     }
+    if return_context:
+        return context
     return render(request, 'auction/listing.html', context=context)
 
 
@@ -211,3 +215,36 @@ def search_view(request):
         'listings': listings
     }
     return render(request, 'auction/index.html', context)
+
+def add_comment_view(request, id):
+    form = CreateCommentForm(request.POST or None)
+    try:
+        listing = Listing.objects.get(id=id)
+    except:
+        raise Http404
+    user = request.user
+    if request.method == 'POST':
+        if form.is_valid() and user.is_authenticated:
+            content = form.cleaned_data.get('content')
+            comment = Comment(
+                user = user,
+                listing = listing,
+                content = content,
+            )
+            comment.save()
+
+    return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+    # context = listing_view(request, id, return_context=True)
+    # return render(request, 'auction/listing.html', context)
+
+
+def delete_comment_view(request, id, comment_id):
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except: 
+        raise Http404
+    comment.delete()
+
+    return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+    # context = listing_view(request, id, return_context=True)
+    # return render(request, 'auction/listing.html', context)

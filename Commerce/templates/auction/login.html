@@ -9,6 +9,7 @@ Login
 {% load crispy_forms_tags %}
 <div class="container py">
     <h1>Login</h1>
+    <br/>
 <form action="{% url 'auction:login' %}" method="post">
     {% csrf_token %}
     <div class="form-group">
