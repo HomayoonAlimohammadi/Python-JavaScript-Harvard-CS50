@@ -27,7 +27,7 @@ def index_view(request):
     return render(request, 'auction/index.html', context=context)
 
 
-def listing_view(request, id, return_context=False):
+def listing_view(request, id):
     try:
         listing = Listing.objects.get(id=id)
     except:
@@ -234,8 +234,7 @@ def add_comment_view(request, id):
             comment.save()
 
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
-    # context = listing_view(request, id, return_context=True)
-    # return render(request, 'auction/listing.html', context)
+
 
 
 def delete_comment_view(request, id, comment_id):
@@ -246,5 +245,3 @@ def delete_comment_view(request, id, comment_id):
     comment.delete()
 
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
-    # context = listing_view(request, id, return_context=True)
-    # return render(request, 'auction/listing.html', context)
