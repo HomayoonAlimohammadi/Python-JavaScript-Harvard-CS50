@@ -8,6 +8,16 @@ Listing {{ listing.id }}
 {% block body %} 
 {% load static %}
 {% load crispy_forms_tags %}
+
+<style>
+    #image {
+        max-width: 500px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
 <div class="container py-2">
     {% if is_watching %} 
     <a href="{% url 'auction:toggle_watch' listing.id %}">
@@ -26,7 +36,8 @@ Listing {{ listing.id }}
     {% else %}  
     <img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
     {% endif %}
-    <br/>
+    <hr>
+    <vr></vr>
     <h2>{{ listing.title }}</h2>
     <h5>
     Starting Price: {{ listing.starting_price }}
