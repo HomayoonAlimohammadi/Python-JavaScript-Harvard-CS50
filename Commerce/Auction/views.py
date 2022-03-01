@@ -27,6 +27,13 @@ def index_view(request):
     }
     return render(request, 'auction/index.html', context=context)
 
+def active_index_view(request):
+    listings = Listing.objects.filter(is_active=True).all()
+    context = {
+        'listings': listings,
+    }
+    return render(request, 'auction/index.html', context=context)
+
 
 def listing_view(request, id, message=None):
     try:
@@ -194,8 +201,21 @@ def delete_listing_view(request, id=None):
     
 
 
-def close_listing_view(request):
-    pass
+def close_listing_view(request, id):
+    try:
+        listing = Listing.objects.get(id=id)
+    except:
+        print('not found')
+        raise Http404
+    if request.method == 'POST':
+        listing.is_active = False
+        listing.save()
+        return HttpResponseRedirect(reverse('auction:index'))
+
+    context = {
+        'listing': listing,
+    }
+    return render(request, 'auction/close.html', context)
 
 
 def login_view(request):

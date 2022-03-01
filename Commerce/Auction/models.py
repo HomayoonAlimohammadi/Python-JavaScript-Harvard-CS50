@@ -38,6 +38,7 @@ class Listing(models.Model):
     starting_price = models.FloatField()
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     current_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     
 
 class Comment(models.Model):

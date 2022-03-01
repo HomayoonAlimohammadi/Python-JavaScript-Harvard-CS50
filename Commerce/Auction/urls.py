@@ -17,12 +17,14 @@ from .views import (
     category_view,
     category_list_view,
     add_bid_view,
+    active_index_view,
 )
 
 
 app_name = 'auction'
 urlpatterns = [
     path('', index_view, name='index'),
+    path('active/', active_index_view, name='active_index'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('register/', register_view, name='register'),

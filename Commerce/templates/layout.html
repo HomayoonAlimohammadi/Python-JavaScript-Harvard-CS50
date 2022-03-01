@@ -13,7 +13,7 @@
         <div style="margin-top: 10px; margin-left: 20px;">
         <h1>Auctions</h1>
             {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>
+                Signed in as <strong>{{ user.username|title }}</strong>
             {% endif %}
         </div>
         <ul class="nav">
@@ -21,7 +21,7 @@
             <a class='nav-link' href="{% url 'index' %}">Home Page</a>
         </li>
         <li class="nav-item">
-            <a class='nav-link' href='{% url "auction:index" %}'>Active Listings</a>
+            <a class='nav-link' href='{% url "auction:active_index" %}'>Active Listings</a>
         </li>
         <li class="nav-item">
             <a class='nav-link' href="{% url 'auction:category_list' %}">Categories</a>

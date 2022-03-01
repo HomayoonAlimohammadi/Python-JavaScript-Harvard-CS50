@@ -5,7 +5,7 @@ from .models import User, Comment, Bid, Listing, Category
 
 class ListingAdmin(admin.ModelAdmin):
     model = Listing
-    list_display = ['id','title', 'starting_price', 'user', 'created_at', 'current_bid']
+    list_display = ['id','title', 'starting_price', 'user', 'created_at', 'current_bid', 'is_active']
 
 class CommentAdmin(admin.ModelAdmin):
     model = Comment
