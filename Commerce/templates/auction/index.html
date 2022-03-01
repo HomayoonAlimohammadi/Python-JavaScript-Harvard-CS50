@@ -30,7 +30,12 @@ Auction
                         {% else %} 
                         {{ listing.description }}<br/>
                         {% endif %}
-                        <b>Starting Price: {{ listing.starting_price }} $</b>
+                        <b>Starting Price: {{ listing.starting_price }} $
+                            {% if listing.current_bid %} 
+                            <h5 class="text-primary">Current Bid: {{ listing.current_bid.amount }} $</h5>
+                        {% endif %} 
+                        </b>
+                        
                         <div class="image-parent">
                         {% if listing.image %} 
                             <img src="{{ listing.image.url }}" class="img-fluid">

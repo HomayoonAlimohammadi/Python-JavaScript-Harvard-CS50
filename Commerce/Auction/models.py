@@ -21,6 +21,11 @@ class Category(models.Model):
         return reverse('auction:category', args=[self.name])
 
 
+class Bid(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bids')
+    amount = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
 class Listing(models.Model):
     title = models.CharField(max_length=20)
@@ -32,14 +37,8 @@ class Listing(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     starting_price = models.FloatField()
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    current_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, blank=True, null=True)
     
-
-class Bid(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bids')
-    amount = models.FloatField()
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bids')
-    created_at = models.DateTimeField(auto_now_add=True)
-
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')

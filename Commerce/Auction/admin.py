@@ -5,7 +5,7 @@ from .models import User, Comment, Bid, Listing, Category
 
 class ListingAdmin(admin.ModelAdmin):
     model = Listing
-    list_display = ['id','title', 'starting_price', 'user', 'created_at']
+    list_display = ['id','title', 'starting_price', 'user', 'created_at', 'current_bid']
 
 class CommentAdmin(admin.ModelAdmin):
     model = Comment
@@ -21,7 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class BidAdmin(admin.ModelAdmin):
     model = Bid
-    list_display = ['listing', 'amount', 'user']
+    list_display = ['id', 'amount', 'user']
 
 
 admin.site.register(User, UserAdmin)

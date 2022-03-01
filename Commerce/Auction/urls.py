@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import (
     index_view,
     listing_view,
@@ -16,6 +16,7 @@ from .views import (
     delete_comment_view,
     category_view,
     category_list_view,
+    add_bid_view,
 )
 
 
@@ -30,7 +31,8 @@ urlpatterns = [
     path('listings/watchlist/', watchlist_view, name='watchlist'),
     path('listings/category/', category_list_view, name='category_list'),
     path('listings/category/<int:id>/', category_view, name='category'),
-    path('listings/<int:id>/', listing_view, name='listing'),
+    path('listings/<int:id>/', listing_view ,name='listing'),
+    path('listings/<int:id>/bid', add_bid_view, name='add_bid'),
     path('listings/<int:id>/edit/', edit_listing_view, name='edit_listing'),
     path('listings/<int:id>/delete/', delete_listing_view, name='delete_listing'),
     path('listings/<int:id>/close/', close_listing_view, name='close_listing'),

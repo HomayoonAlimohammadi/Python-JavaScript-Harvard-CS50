@@ -19,6 +19,9 @@ Listing {{ listing.id }}
 </style>
 
 <div class="container py-2">
+    {% if message %} 
+    <h6 class="text-danger">{{ message }}</h6>
+    {% endif %} 
     {% if is_watching %} 
     <a href="{% url 'auction:toggle_watch' listing.id %}">
         <button class="btn btn-secondary">Remove from Watchlist</button>
@@ -41,11 +44,28 @@ Listing {{ listing.id }}
     <h5>
     Starting Price: {{ listing.starting_price }} $
     </h5>
+    {% if listing.current_bid %} 
+            <h4 class="text-primary">
+                Current Bid: {{ listing.current_bid.amount }} $
+            </h4>
+            By <strong>{{ listing.current_bid.user }}</strong>, {{ listing.current_bid.created_at }} 
+    {% endif %} 
+    <br/><br/>
+    <h5 class="text-primary">Add you Bid</h5>
+    <form action="{% url 'auction:add_bid' listing.id %}" method="post">
+        {% csrf_token %} 
+        {{ bid_form|crispy }}
+        <input class="btn btn-success" type="submit" value="Bid" />
+    </form>
+    <br/><br/>
+    <hr>
     <h6>
+    <b class="text-info">Description:</b><br/><br/>
     {{ listing.description }}
     </h6><br/><br/>
     Created at: {{ listing.created_at }}<br/>
-    Last Update: {{ listing.updated_at }}<br/><br/>
+    Last Update: {{ listing.updated_at }}<br/>
+    Owner: <b>{{ listing.user }}</b><br/><br/>
     Categories: 
     {% for category in listing.category.all %} 
     <a href="{% url 'auction:category' category.id %}">{{ category.name }}</a>

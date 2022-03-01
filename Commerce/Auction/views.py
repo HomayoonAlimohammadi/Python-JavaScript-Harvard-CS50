@@ -1,10 +1,11 @@
 from collections import UserList
+import http
 from http.client import HTTPResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, Http404
-from .models import Listing, Comment, Category
+from .models import Listing, Comment, Category, Bid
 from .forms import (
     CreateBidForm,
     CreateCategoryForm,
@@ -27,12 +28,13 @@ def index_view(request):
     return render(request, 'auction/index.html', context=context)
 
 
-def listing_view(request, id):
+def listing_view(request, id, message=None):
     try:
         listing = Listing.objects.get(id=id)
     except:
         raise Http404
     comment_form = CreateCommentForm()
+    bid_form = CreateBidForm()
     user = request.user
     if user.is_authenticated:
         if user in listing.watchers.all():
@@ -45,6 +47,8 @@ def listing_view(request, id):
     'listing': listing,
     'is_watching': is_watching,
     'comment_form': comment_form,
+    'message': message,
+    'bid_form': bid_form,
     }
     return render(request, 'auction/listing.html', context=context)
 
@@ -307,3 +311,46 @@ def category_list_view(request):
         'categories': categories,
     }
     return render(request, 'auction/category_list.html', context)
+
+
+def add_bid_view(request, id=None):
+    try:
+        listing = Listing.objects.get(id=id)
+    except:
+        raise Http404
+    form = CreateBidForm(request.POST or None)
+    user = request.user
+    if request.method == 'POST':
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            if listing.current_bid is not None:
+                current_bid = listing.current_bid.amount
+            else:
+                current_bid = 0
+            max_value = max([listing.starting_price, current_bid])
+            if user.is_authenticated and user != listing.user:
+                if amount > max_value:
+                    bid = Bid(
+                        amount = amount,
+                        user = user,
+                    )
+                    bid.save()
+                    listing.current_bid = bid
+                    listing.save()
+                else:
+                    message = "Your Bid can not be less than the Current Bid or the Starting Price."
+                    print(message)
+                    return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+            elif user.is_authenticated and user == listing.user:
+                message = 'You can not Bid on your own listing.'
+                print(message)
+                return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+            else:
+                return HttpResponseRedirect(reverse('auction:login'))
+        else:
+            message = 'Invalid Bid'
+            print(message)
+            return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+
+    return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+
