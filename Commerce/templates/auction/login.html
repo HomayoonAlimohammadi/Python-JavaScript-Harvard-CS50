@@ -8,6 +8,9 @@ Login
 {% block body %} 
 {% load crispy_forms_tags %}
 <div class="container py">
+    {% if message %} 
+    <h6 class="text-danger">{{ message }}</h6>
+    {% endif %} 
     <h1>Login</h1>
     <br/>
 <form action="{% url 'auction:login' %}" method="post">

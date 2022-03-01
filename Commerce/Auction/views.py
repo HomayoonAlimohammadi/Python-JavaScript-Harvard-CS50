@@ -87,9 +87,9 @@ def watchlist_view(request):
     if user.is_authenticated:
         watchlist = user.watchlist.all()
     context = {
-        'watchlist': watchlist,
+        'listings': watchlist,
     }
-    return render(request, 'auction/watchlist.html', context)
+    return render(request, 'auction/index.html', context)
 
 
 def create_listing_view(request):
