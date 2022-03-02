@@ -5,8 +5,9 @@ Resigter
 {% endblock %} 
 
 {% block body %}
-{% load crispy_forms_tags %}         
-<div class="container py-5">
+{% load crispy_forms_tags %}  
+
+<div class="container py">
     <h1>Register</h1>
 <form action="{% url 'auction:register' %}" method="post">
     {% csrf_token %} 

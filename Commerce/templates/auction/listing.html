@@ -19,9 +19,6 @@ Listing: {{ listing.title|title }}
 </style>
 
 <div class="container py-2">
-    {% if message %} 
-    <h6 class="text-danger">{{ message }}</h6>
-    {% endif %} 
     {% if is_watching %} 
     <a href="{% url 'auction:toggle_watch' listing.id %}">
         <button class="btn btn-info">Remove from Watchlist</button>
@@ -40,7 +37,7 @@ Listing: {{ listing.title|title }}
     <img src="{% static 'Auction/no_image.jpg' %}" class="card-img-top img-fluid">
     {% endif %}
     <hr>
-    <h2>{{ listing.title|title }}</h2>
+    <h2>{{ listing.title }}</h2>
     <h5>
     Starting Price: {{ listing.starting_price }} $
     </h5>

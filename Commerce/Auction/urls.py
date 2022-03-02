@@ -18,6 +18,7 @@ from .views import (
     category_list_view,
     add_bid_view,
     active_index_view,
+    my_listings_view,
 )
 
 
@@ -31,6 +32,7 @@ urlpatterns = [
     path('listings/search/', search_view, name='search'),
     path('listings/create/', create_listing_view, name='create_listing'),
     path('listings/watchlist/', watchlist_view, name='watchlist'),
+    path('listings/my_listings/', my_listings_view, name='my_listings'),
     path('listings/category/', category_list_view, name='category_list'),
     path('listings/category/<int:id>/', category_view, name='category'),
     path('listings/<int:id>/', listing_view ,name='listing'),

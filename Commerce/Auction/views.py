@@ -35,7 +35,7 @@ def active_index_view(request):
     return render(request, 'auction/index.html', context=context)
 
 
-def listing_view(request, id, message=None):
+def listing_view(request, id):
     try:
         listing = Listing.objects.get(id=id)
     except:
@@ -54,7 +54,6 @@ def listing_view(request, id, message=None):
     'listing': listing,
     'is_watching': is_watching,
     'comment_form': comment_form,
-    'message': message,
     'bid_form': bid_form,
     }
     return render(request, 'auction/listing.html', context=context)
@@ -69,17 +68,16 @@ def toggle_watch(request, id):
     if user.is_authenticated:
         if user in listing.watchers.all():
             listing.watchers.remove(user)
-            is_watching = False
+            messages.info(request, f"{listing.title} was removed from the watchlist.")
         else: 
             listing.watchers.add(user)
-            is_watching = True
+            messages.info(request, f"{listing.title} was added to the watchlist.")
     else:
+        messages.warning(request, 'You should login to alter your watchlist.')
         return HttpResponseRedirect(reverse('auction:login'))
-    context = {
-        'listing': listing,
-        'is_watching': is_watching,
-    }
-    return render(request, 'auction/listing.html', context)
+
+    return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+
 
 
 def watchlist_view(request):
@@ -92,8 +90,22 @@ def watchlist_view(request):
     return render(request, 'auction/index.html', context)
 
 
+def my_listings_view(request):
+    user = request.user
+    if user.is_authenticated:
+        listings = Listing.objects.filter(user=user).all()
+    else:
+        messages.error(request, 'You must be logged in to your listings.')
+        return HttpResponseRedirect(reverse('auction:login'))
+    context = {
+        'listings': listings
+    }
+    return render(request, 'auction/index.html', context)
+
+
 def create_listing_view(request):
     if not request.user.is_authenticated:
+        messages.warning(request, 'You should login first to create a listing.')
         return HttpResponseRedirect(reverse('auction:login'))
     if request.method == 'POST':
         form = CreateListingForm(request.POST, request.FILES or None)
@@ -118,6 +130,7 @@ def create_listing_view(request):
                     category = Category(name=category_name)
                     category.save()
                 listing.category.add(category)
+            messages.success(request, 'Listing created successfully.')
             return HttpResponseRedirect(reverse('auction:listing', args=[listing.id]))
     else:
         form = CreateListingForm()
@@ -176,9 +189,10 @@ def edit_listing_view(request, id=None):
                 listing.image = form.cleaned_data.get('image')
 
             listing.save()
+            messages.success(request, "Listing edited successfully")
             return HttpResponseRedirect(reverse('auction:listing', args=[id]))
         else:
-            context['message'] = 'Invalid Inputs!'
+            messages.error(request, 'Invalid inputs.')
 
     return render(request, 'auction/create-edit.html', context=context)
     
@@ -191,8 +205,14 @@ def delete_listing_view(request, id=None):
         raise Http404
 
     if request.method == 'POST':
-        listing.delete()
-        return HttpResponseRedirect(reverse('auction:index'))
+        print('listing.current_bid: ', listing.current_bid)
+        if listing.current_bid is not None:
+            messages.error(request, 'Listing can not be deleted. Consider users rights!')
+            return HttpResponseRedirect(reverse('auction:listing', args=[id]))
+        else:
+            listing.delete()
+            messages.success(request, 'Listing was deleted successfully.')
+            return HttpResponseRedirect(reverse('auction:index'))
         
     context = {
         'listing': listing,
@@ -201,15 +221,17 @@ def delete_listing_view(request, id=None):
     
 
 
+
+
 def close_listing_view(request, id):
     try:
         listing = Listing.objects.get(id=id)
     except:
-        print('not found')
         raise Http404
     if request.method == 'POST':
         listing.is_active = False
         listing.save()
+        messages.success(request, 'Listing was closed successfully.')
         return HttpResponseRedirect(reverse('auction:index'))
 
     context = {
@@ -234,9 +256,10 @@ def login_view(request):
             print('user',user)
             if user:
                 login(request, user)
+                messages.info(request, f'Logged in as {username}')
                 return HttpResponseRedirect(reverse('index'))
             else:
-                context['message'] = 'Invalid Username or Password.'
+                messages.error(request, 'Invalid Username or Password')
 
     return render(request, 'auction/login.html', context=context)
 
@@ -247,6 +270,7 @@ def logout_view(request):
         password = request.user.password
         user = authenticate(request, username=username, password=password)
         logout(request)
+        messages.info(request, f'Logged out of {username}')
         return HttpResponseRedirect(reverse('index'))
     context = {}
     return render(request, 'auction/logout.html', context=context)
@@ -260,7 +284,8 @@ def register_view(request):
             login(request, user)
             messages.success(request, 'Registration successful')
             return HttpResponseRedirect(reverse('index'))
-        messages.error(request, 'Unsuccessful Registration. Invalid information.')
+        else:
+            messages.error(request, 'Unsuccessful Registration. Invalid information.')
     context = {
         'form': form
     }
@@ -272,7 +297,7 @@ def search_view(request):
         q = request.POST['q']
     else:
         q = ''
-    listings = Listing.objects.filter(Q(title__icontains=q) | Q(description__icontains=q))
+    listings = Listing.objects.filter(Q(title__icontains=q))
     context = {
         'listings': listings
     }
@@ -294,6 +319,9 @@ def add_comment_view(request, id):
                 content = content,
             )
             comment.save()
+            messages.success(request, 'Comment was added successfully.')
+        else:
+            messages.error(request, 'Invalid comment content.')
 
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
 
@@ -305,7 +333,7 @@ def delete_comment_view(request, id, comment_id):
     except: 
         raise Http404
     comment.delete()
-
+    messages.success(request, 'Comment deleted successfully.')
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
 
 
@@ -357,19 +385,21 @@ def add_bid_view(request, id=None):
                     bid.save()
                     listing.current_bid = bid
                     listing.save()
+                    messages.success(request, 'Bid added successfully.')
                 else:
                     message = "Your Bid can not be less than the Current Bid or the Starting Price."
-                    print(message)
+                    messages.error(request, message)
                     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
             elif user.is_authenticated and user == listing.user:
                 message = 'You can not Bid on your own listing.'
-                print(message)
+                messages.error(request, message)
                 return HttpResponseRedirect(reverse('auction:listing', args=[id]))
             else:
+                messages.warning(request, 'Log in is required to add bid.')
                 return HttpResponseRedirect(reverse('auction:login'))
         else:
             message = 'Invalid Bid'
-            print(message)
+            messages.error(request, message)
             return HttpResponseRedirect(reverse('auction:listing', args=[id]))
 
     return HttpResponseRedirect(reverse('auction:listing', args=[id]))
