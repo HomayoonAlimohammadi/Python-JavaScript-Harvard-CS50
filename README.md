@@ -1,4 +1,19 @@
-# Harvard CS50's Web Development with Django Full Course!
+<h1 align='center'>Harvard CS50's Web Development with Django Full Course!</h1>
+
+<p>
+I attended this course in order to learn Web Development with Django and JavaScript.<br/>
+You can see other Projects Such as <a href='https://github.com/HomayoonAlimohammadi/Commerce'><b>Commerce</b></a> and <a href='https://github.com/HomayoonAlimohammadi/Mail'><b>Mail</b></a> in my GitHub in their corresponding repo.
+</p>
+
+<br/>
+![Course](https://github.com/homayoonalimohammadi/Python-JavaScript-Harvard-CS50/blob/main/Course.png?raw=true)
+<br/><br/>
+
+<p>
+Here is a quick note about basic concepts of Front-end and SQL.
+</p>
+
+
 ## Lecture 0 - HTML & CSS
 ```html
 <!DOCTYPE html> 
